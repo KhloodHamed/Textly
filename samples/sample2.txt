@@ -1,0 +1,9 @@
+hello, world! this is a sample text file.
+it includes multiple types of content such as:
+- emails: example@example.com, test123@mail.com
+- phone numbers: 055-123-4567, +966-50-000-0000
+- repeated words like like like this.
+some lines have only capital letters.
+some lines... are empty below:
+did you notice that?
+hello again! let's test the word 'hello' count.

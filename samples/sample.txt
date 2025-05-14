@@ -1,0 +1,6 @@
+Hello world! This is a sample text.
+This text is for testing the text analysis script.
+Hello again, world.
+Bash scripting is fun and useful.
+Let's see how many times words appear.
+Text, text, text everywhere!
