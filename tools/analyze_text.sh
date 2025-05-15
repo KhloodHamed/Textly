@@ -1,52 +1,44 @@
 #!/bin/bash
 
-# File: tools/analyze.sh
-
 filename=$1
 
-# Check if file exists
 if [[ ! -f "$filename" ]]; then
-    echo "❌ File not found!"
+    whiptail --msgbox "File not found!" 8 40
     exit 1
 fi
 
-while true; do
-    echo ""
-    echo "🧠 Text Analysis - Select an option:"
-    echo "1. Count total words"
-    echo "2. Show top 3 most frequent words"
-    echo "3. Count specific word occurrence"
-    echo "4. Count total lines"
-    echo "5. Exit"
-    read -p ">> " choice
+CHOICE=$(whiptail --title "Text Analysis" --menu "Select an operation:" 15 50 5 \
+"1" "Word Count" \
+"2" "Top 3 Frequent Words" \
+"3" "Count Specific Word" \
+"4" "Line Count" \
+"5" "Exit" 3>&1 1>&2 2>&3)
 
-    case $choice in
-        1)
-            echo "🔢 Total number of words:"
-            wc -w < "$filename"
-            ;;
-        2)
-            echo "📊 Top 3 most frequent words:"
-            tr -s '[:space:][:punct:]' '\n' < "$filename" | \
-            grep -vE '^[[:space:]]*$' | \
-            tr '[:upper:]' '[:lower:]' | \
-            sort | uniq -c | sort -nr | head -3
-            ;;
-        3)
-            read -p "🔍 Enter the word to search: " word
-            count=$(grep -o -i "\b$word\b" "$filename" | wc -l)
-            echo "The word '$word' occurred $count times."
-            ;;
-        4)
-            echo "📏 Total number of lines:"
-            wc -l < "$filename"
-            ;;
-        5)
-            echo "👋 Exiting text analysis."
-            break
-            ;;
-        *)
-            echo "⚠️ Invalid option. Try again."
-            ;;
-    esac
-done
+case $CHOICE in
+    1)
+        wc -w < "$filename" > result.txt
+        whiptail --title "Word Count" --textbox result.txt 10 40
+        ;;
+    2)
+        tr -s '[:space:][:punct:]' '\n' < "$filename" | \
+        grep -vE '^[[:space:]]*$' | \
+        tr '[:upper:]' '[:lower:]' | \
+        sort | uniq -c | sort -nr | head -3 > result.txt
+
+        whiptail --title "Top 3 Words" --textbox result.txt 15 50
+        ;;
+    3)
+        WORD=$(whiptail --inputbox "Enter word to search:" 8 40 "" 3>&1 1>&2 2>&3)
+        COUNT=$(grep -o -i "\\b$WORD\\b" "$filename" | wc -l)
+        echo "The word '$WORD' occurred $COUNT times." > result.txt
+        whiptail --title "Word Count Result" --textbox result.txt 10 50
+        ;;
+    4)
+        wc -l < "$filename" > result.txt
+        whiptail --title "Line Count" --textbox result.txt 10 40
+        ;;
+    5)
+        exit 0
+        ;;
+esac
+

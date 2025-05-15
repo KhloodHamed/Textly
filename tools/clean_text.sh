@@ -1,47 +1,39 @@
 #!/bin/bash
 
-# File: tools/clean.sh
-
 filename=$1
 
 # Check if file exists
 if [[ ! -f "$filename" ]]; then
-    echo "❌ File not found!"
+    whiptail --msgbox "File not found!" 8 40
     exit 1
 fi
 
 while true; do
-    echo ""
-    echo "🧹 Text Cleaning - Select an option:"
-    echo "1. Remove special characters"
-    echo "2. Remove empty lines"
-    echo "3. Convert all text to lowercase"
-    echo "4. Exit"
-    read -p ">> " choice
+CHOICE=$(whiptail --title "Text Cleaning" --menu "Choose an operation:" 15 50 5 \
+"1" "Remove special characters" \
+"2" "Remove empty lines" \
+"3" "Convert to lowercase" \
+"4" "Exit" 3>&1 1>&2 2>&3)
 
-    case $choice in
-        1)
-            echo "🧼 Removing special characters..."
-            sed -i 's/[^a-zA-Z0-9 
-]//g' "$filename"
-            echo "✔️ Special characters removed."
-            ;;
-        2)
-            echo "🧻 Removing empty lines..."
-            sed -i '/^\s*$/d' "$filename"
-            echo "✔️ Empty lines removed."
-            ;;
-        3)
-            echo "🔡 Converting text to lowercase..."
-            tr '[:upper:]' '[:lower:]' < "$filename" > temp && mv temp "$filename"
-            echo "✔️ Text converted to lowercase."
-            ;;
-        4)
-            echo "👋 Exiting text cleaning."
-            break
-            ;;
-        *)
-            echo "⚠️ Invalid option. Try again."
-            ;;
-    esac
+case $CHOICE in
+    1)
+        sed -i 's/[^a-zA-Z0-9 \n]//g' "$filename"
+        whiptail --msgbox "Special characters removed from file." 8 50
+        ;;
+    2)
+        sed -i '/^\s*$/d' "$filename"
+        whiptail --msgbox "Empty lines removed from file." 8 50
+        ;;
+    3)
+        tr '[:upper:]' '[:lower:]' < "$filename" > temp && mv temp "$filename"
+        whiptail --msgbox "All text converted to lowercase." 8 50
+        ;;
+    4)
+        exit 0
+        ;;
+    *)
+        whiptail --msgbox "Invalid option." 8 40
+        ;;
+esac
 done
+
