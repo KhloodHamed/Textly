@@ -6,7 +6,7 @@ if [[ ! -f "$filename" ]]; then
     whiptail --msgbox "File not found!" 8 40
     exit 1
 fi
-
+while true; do
 CHOICE=$(whiptail --title "Text Analysis" --menu "Select an operation:" 15 50 5 \
 "1" "Word Count" \
 "2" "Top 3 Frequent Words" \
@@ -38,7 +38,10 @@ case $CHOICE in
         whiptail --title "Line Count" --textbox result.txt 10 40
         ;;
     5)
-        exit 0
+        break
         ;;
+    *)
+        whiptail --msgbox "Invalid option." 8 40
+         ;;
 esac
-
+done
