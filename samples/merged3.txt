@@ -1,3 +1,9 @@
+hello world! this is a sample text.
+this text is for testing the text analysis script.
+hello again, world.
+bash scripting is fun and useful.
+let's see how many times words appear.
+text, text, text everywhere!
 Hello World This is a sample text file
 It includes multiple types of content such as
  Emails exampleexamplecom test123mailcom
