@@ -11,7 +11,7 @@ CHOICE=$(whiptail --title "🧰 Textly – Text Tools Suite" --menu "Select a to
 
 exitstatus=$?
 
-# إذا المستخدم ضغط Cancel من القائمة
+
 if [ $exitstatus -ne 0 ]; then
     whiptail --msgbox "Exiting Textly. Goodbye!" 8 40
     clear
