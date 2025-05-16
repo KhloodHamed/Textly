@@ -14,6 +14,11 @@ CHOICE=$(whiptail --title "Text Transformation" --menu "Choose an operation:" 15
 "3" "Reverse line order" \
 "4" "Exit" 3>&1 1>&2 2>&3)
 
+exitstatus=$?
+if [ $exitstatus -ne 0 ]; then
+    whiptail --msgbox "Cancelled. Returning to menu." 8 40
+    break
+fi
 case $CHOICE in
     1)
         tr '[:lower:]' '[:upper:]' < "$filename" > temp && mv temp "$filename"

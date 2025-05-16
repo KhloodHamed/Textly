@@ -14,6 +14,12 @@ CHOICE=$(whiptail --title "Text Analysis" --menu "Select an operation:" 15 50 5 
 "4" "Line Count" \
 "5" "Exit" 3>&1 1>&2 2>&3)
 
+exitstatus=$?
+if [ $exitstatus -ne 0 ]; then
+    whiptail --msgbox "Cancelled. Returning to menu." 8 40
+    break
+fi
+
 case $CHOICE in
     1)
         wc -w < "$filename" > result.txt
@@ -29,6 +35,12 @@ case $CHOICE in
         ;;
     3)
         WORD=$(whiptail --inputbox "Enter word to search:" 8 40 "" 3>&1 1>&2 2>&3)
+        exitstatus=$?
+        if [ $exitstatus -ne 0 ]; then
+           whiptail --msgbox "Cancelled. Returning to menu." 8 40
+           continue
+        fi
+ 
         COUNT=$(grep -o -i "\\b$WORD\\b" "$filename" | wc -l)
         echo "The word '$WORD' occurred $COUNT times." > result.txt
         whiptail --title "Word Count Result" --textbox result.txt 10 50

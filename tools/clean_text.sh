@@ -15,6 +15,11 @@ CHOICE=$(whiptail --title "Text Cleaning" --menu "Choose an operation:" 15 50 5 
 "3" "Convert to lowercase" \
 "4" "Exit" 3>&1 1>&2 2>&3)
 
+exitstatus=$?
+if [ $exitstatus -ne 0 ]; then
+    whiptail --msgbox "Cancelled. Returning to menu." 8 40
+    break
+fi
 case $CHOICE in
     1)
         sed -i 's/[^a-zA-Z0-9 \n]//g' "$filename"
