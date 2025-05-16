@@ -3,16 +3,6 @@
 filename=$1
 
 
-if [[ -z "$filename" ]]; then
-    filename=$(whiptail --inputbox "Enter path to the file:" 8 60 "samples/sample.txt" 3>&1 1>&2 2>&3)
-    exitstatus=$?
-    if [ $exitstatus -ne 0 ]; then
-        whiptail --msgbox "Cancelled. Returning to main menu." 8 40
-        exit 0
-    fi
-fi
-
-
 if [[ ! -f "$filename" ]]; then
     whiptail --msgbox "File not found!" 8 40
     exit 1
