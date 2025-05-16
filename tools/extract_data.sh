@@ -2,6 +2,17 @@
 
 filename=$1
 
+# إذا الملف ما انعطى كـ argument
+if [[ -z "$filename" ]]; then
+    filename=$(whiptail --inputbox "Enter path to the file:" 8 60 "samples/sample.txt" 3>&1 1>&2 2>&3)
+    exitstatus=$?
+    if [ $exitstatus -ne 0 ]; then
+        whiptail --msgbox "Cancelled. Returning to main menu." 8 40
+        exit 0
+    fi
+fi
+
+
 if [[ ! -f "$filename" ]]; then
     whiptail --msgbox "File not found!" 8 40
     exit 1
@@ -13,6 +24,13 @@ CHOICE=$(whiptail --title "Data Extraction" --menu "Choose an extraction type:" 
 "2" "Extract Phone Numbers" \
 "3" "Extract lines with specific word" \
 "4" "Exit" 3>&1 1>&2 2>&3)
+exitstatus=$?
+
+# إذا المستخدم ضغط Cancel من القائمة
+if [ $exitstatus -ne 0 ]; then
+    whiptail --msgbox "Cancelled. Returning to main menu." 8 40
+    break
+fi
 
 case $CHOICE in
     1)
@@ -25,6 +43,11 @@ case $CHOICE in
         ;;
     3)
         WORD=$(whiptail --inputbox "Enter the word to search for:" 8 40 "" 3>&1 1>&2 2>&3)
+        exitstatus=$?
+        if [ $exitstatus -ne 0 ]; then
+            whiptail --msgbox "Cancelled search. Returning to menu." 8 40
+            continue
+        fi
         grep -i "$WORD" "$filename" > result.txt
         whiptail --title "Lines Matching '$WORD'" --textbox result.txt 15 50
         ;;
